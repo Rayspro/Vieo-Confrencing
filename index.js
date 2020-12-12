@@ -1,30 +1,37 @@
-const express = require("express");
-const app = express();
-const server = require("http").Server(app);
-const io = require("socket.io")(server);
-const { v4: uuidv4 } = require('uuid');
+const express = require('express')
+const app = express()
+const { ExpressPeerServer } = require('peer');
+const server = require('http').Server(app)
+const io = require('socket.io')(server)
+const { v4: uuidV4 } = require('uuid')
 
-app.set("view engine", 'ejs');
-app.use(express.static("public"));
-
-app.get("/", (req, res) => {
-    res.redirect(`/${uuidv4()}`);
-})
-
-app.get("/:room", (req, res) => {
-    res.render("home", { roomId: req.params.room });
-})
-
-io.on("connection", socket => {
-    socket.emit("Connected", "Connected To Server");
-
-    socket.on("join-room", (roomId, userId) => {
-        socket.join(roomId);
-        console.log(userId);
-        socket.to(roomId).broadcast.emit("new-user-connected", userId);
-    })
-})
-
-server.listen(process.env.PORT||3005, () => {
-    console.log("Connected");
+app.enable('trust proxy')
+const peerServer = ExpressPeerServer(server, {
+  path: '/'
 });
+
+app.use('/peer', peerServer);
+
+app.set('view engine', 'ejs')
+app.use(express.static('public'))
+
+app.get('/', (req, res) => {
+  res.redirect(`/${uuidV4()}`)
+})
+
+app.get('/:room', (req, res) => {
+  res.render('home', { roomId: req.params.room })
+})
+
+io.on('connection', socket => {
+  socket.on('join-room', (roomId, userId) => {
+    socket.join(roomId)
+    socket.to(roomId).broadcast.emit('user-connected', userId)
+
+    socket.on('disconnect', () => {
+      socket.to(roomId).broadcast.emit('user-disconnected', userId)
+    })
+  })
+})
+
+server.listen(3000)
