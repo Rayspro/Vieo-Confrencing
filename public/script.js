@@ -128,8 +128,5 @@ function named(event) {
   } catch(err) {
     console.log('Oops, unable to copy');
   }
-
-  // Remove the selections - NOTE: Should use
-  // removeRange(range) when it is supported
   window.getSelection().removeAllRanges();
 } ;
