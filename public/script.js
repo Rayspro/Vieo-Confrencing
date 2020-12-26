@@ -11,7 +11,7 @@ const peers = {};
 let count = 0;
 var c = 0;
 
-document.querySelector(".link input").value= window.location.href;
+document.querySelector(".link input").value = window.location.href;
 
 document.querySelector(".btn-cancel")
   .addEventListener("click", () => {
@@ -98,13 +98,38 @@ function addVideoStream(video, stream) {
   videoGrid.append(video)
 }
 
-document.querySelector(".link div").addEventListener("click",copyText)
+document.querySelector(".link div").addEventListener("click", named)
 
 function copyText() {
-  console.log("Copied")
-  var copyText = document.getElementById("myInput");
-  copyText.select();
-  copyText.setSelectionRange(0, 99999); 
-  document.execCommand("copy");
-  alert("Copied the text: " + copyText.value);
+  var copyText = document.getElementById("myInput") ;
+  copyText.select();  
+  // console.log("Copied",copyText)
+  // document.execCommand("copy",false,"hello");
+  // console.log("Copied")
+  // alert("Copied the text: " + copyText.value);
+  const textToCopy = 'Hello there!'
+  navigator.clipboard.writeText(copyText.value)
+    .then(() => { alert(`Copied!`) })
+    .catch((error) => { alert(`Copy failed! ${error}`) })
 }
+
+function named(event) {
+  // Select the email link anchor text
+  var emailLink = document.querySelector('#myInput');
+  var range = document.createRange();
+  range.selectNode(emailLink);
+  window.getSelection().addRange(range);
+
+  try {
+    // Now that we've selected the anchor text, execute the copy command
+    var successful = document.execCommand('copy');
+    var msg = successful ? 'successful' : 'unsuccessful';
+    console.log('Copy email command was ' + msg);
+  } catch(err) {
+    console.log('Oops, unable to copy');
+  }
+
+  // Remove the selections - NOTE: Should use
+  // removeRange(range) when it is supported
+  window.getSelection().removeAllRanges();
+} ;
