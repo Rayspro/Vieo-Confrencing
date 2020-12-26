@@ -34,8 +34,28 @@
       left: 10px;
       right: 10px;
       color: brown;
-      font-size: 1.2rem;
+      display: flex;
+    }
+
+    .link > div{
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      border-style: solid;
+      border-width: 1px;
+      cursor: pointer;
+      padding: 0px 10px;
+    }
+
+    .link > input{
+      font-size: 0.9rem;
       font-weight: 500;
+      padding: 8px 10px;
+      border: none;
+      width: 400px;
+      user-select: none;
     }
 
     .self {
@@ -47,18 +67,36 @@
     }
 
     .btn-cancel {
-      padding: 10px 20px;
       background-color: #E54E60;
       color: #ffffff;
       position: fixed;
-      right: 20px;
-      top: 20px;
+      margin: auto;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 100%;
+      bottom: 10%;
+      left: 48%;
+      z-index: 1000;
       cursor: pointer;
       transition: all 50ms ease;
     }
 
-    .btn-cancel:hover{
-      transform: scale(1.05);
+    .btn-cancel>img {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      transition: all 50ms ease;
+    }
+
+    .btn-cancel>img:hover {
+      transform: scale(1.2);
+    }
+
+    .btn-cancel:hover {
+      transform: scale(1.2);
     }
 
     video {
@@ -73,9 +111,11 @@
 
 <body>
   <div class="link">
+    <input type="text" value="" id="myInput" disabled>
+    <div>Copy</div>
   </div>
   <div class="btn-cancel">
-    Cancel
+    <img src="end.svg" />
   </div>
   <div id="video-grid"></div>
 </body>

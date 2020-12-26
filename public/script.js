@@ -2,7 +2,7 @@ const socket = io('/')
 const videoGrid = document.getElementById('video-grid')
 const myPeer = new Peer(undefined, {
   host: '/',
-  port: 443,
+  port: 3000,
   path: '/peer'
 })
 let myVideo = document.createElement('video')
@@ -11,8 +11,7 @@ const peers = {};
 let count = 0;
 var c = 0;
 
-document.querySelector(".link")
-  .innerHTML = window.location.href;
+document.querySelector(".link input").value= window.location.href;
 
 document.querySelector(".btn-cancel")
   .addEventListener("click", () => {
@@ -32,8 +31,6 @@ myPeer.on("call", (call, id) => {
       count++;
     })
     call.on("close", () => {
-      count--;
-      c--;
       video.remove()
     })
   })
@@ -63,8 +60,6 @@ navigator.mediaDevices.getUserMedia({
 
 socket.on('user-disconnected', userId => {
   console.log("disconnected", userId)
-  count--;
-  c--;
   // count.filter((id) => {
   //   if (id == userId) {
   //     return false
@@ -90,8 +85,6 @@ function connectToNewUser(userId, stream) {
   })
   call.on('close', () => {
     video.remove()
-    count--;
-    c--;
     console.log("No.", (Object.keys(peers)).length)
   })
   peers[userId] = call
@@ -99,9 +92,19 @@ function connectToNewUser(userId, stream) {
 
 function addVideoStream(video, stream) {
   video.srcObject = stream
-  c++;
   video.addEventListener('loadedmetadata', () => {
     video.play()
   })
   videoGrid.append(video)
+}
+
+document.querySelector(".link div").addEventListener("click",copyText)
+
+function copyText() {
+  console.log("Copied")
+  var copyText = document.getElementById("myInput");
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); 
+  document.execCommand("copy");
+  alert("Copied the text: " + copyText.value);
 }
