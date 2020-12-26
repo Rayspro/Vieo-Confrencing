@@ -11,11 +11,14 @@ const peerServer = ExpressPeerServer(server, {
 });
 
 app.use('/peer', peerServer);
-
-app.set('view engine', 'ejs')
-app.use(express.static('public'))
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
+  res.render(`index`)
+})
+
+app.get('/start', (req, res) => {
   res.redirect(`/${uuidV4()}`)
 })
 
